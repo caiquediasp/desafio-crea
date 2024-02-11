@@ -1,15 +1,19 @@
 package com.desafiocrea.util;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Profissional {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String codigo;
     private String nome;
     private String email;
     private String senha;
     private String telefone;
     private TipoProfissional tipo;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private SituacaoRegistro situacaoRegistro;
     private LocalDate dataNascimento;
     private LocalDate dataRegistro;

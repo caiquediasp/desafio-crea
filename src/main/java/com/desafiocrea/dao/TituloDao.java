@@ -6,9 +6,11 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface TituloDao {
-    ResponseEntity<Titulo> adicionarTitulo(String codigo, Titulo titulo);
+    ResponseEntity<Titulo> adicionarTitulo(String codigo, String descricao);
 
-    ResponseEntity<List<Titulo>> listarTitulos(String codigo);
+    ResponseEntity<List<Titulo>> buscarTituloPorProfissional(String codigo);
 
-    ResponseEntity excluirTitulo(String codigo);
+    ResponseEntity<List<Titulo>> listarTitulos();
+
+    ResponseEntity excluirTitulo(Titulo titulo);
 }

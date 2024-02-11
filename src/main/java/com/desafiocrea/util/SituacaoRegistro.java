@@ -1,5 +1,8 @@
 package com.desafiocrea.util;
 
 public enum SituacaoRegistro {
-    ATIVO, INATIVO, CANCELADO
+    ATIVO,
+    INATIVO,
+    CANCELADO,
+    NULA
 }
