@@ -2,7 +2,6 @@ package com.desafiocrea.controller;
 
 import com.desafiocrea.dao.impl.ProfissionalDaoImpl;
 import com.desafiocrea.util.Profissional;
-import com.desafiocrea.util.Titulo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +35,8 @@ public class ProfissionalController {
     }
 
     @PutMapping("/ativarProfissional/{codigo}")
-    public ResponseEntity<Profissional> ativarProfissional(@PathVariable("codigo") String codigo, Titulo titulo) {
-        return profissionalDao.ativarProfissional(codigo, titulo);
+    public ResponseEntity<Profissional> ativarProfissional(@PathVariable("codigo") String codigo, String descricao) {
+        return profissionalDao.ativarProfissional(codigo, descricao);
     }
 
     @PutMapping("/desativarProfissional/{codigo}")

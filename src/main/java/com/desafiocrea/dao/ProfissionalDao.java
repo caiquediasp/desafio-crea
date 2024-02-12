@@ -1,7 +1,6 @@
 package com.desafiocrea.dao;
 
 import com.desafiocrea.util.Profissional;
-import com.desafiocrea.util.Titulo;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface ProfissionalDao {
 
     ResponseEntity excluirProfissional(String codigo);
 
-    ResponseEntity<Profissional> ativarProfissional(String codigo, Titulo titulo);
+    ResponseEntity<Profissional> ativarProfissional(String codigo, String descricao);
 
     ResponseEntity<Profissional> desativarProfissional(String codigo);
 

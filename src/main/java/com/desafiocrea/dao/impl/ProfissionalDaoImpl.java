@@ -141,7 +141,12 @@ public class ProfissionalDaoImpl implements ProfissionalDao {
                 SituacaoRegistro situacaoRegistro = SituacaoRegistro.valueOf(resultSet.getString(7));
                 LocalDate dataNascimento = resultSet.getDate(8).toLocalDate();
                 LocalDate dataRegistro = resultSet.getDate(9).toLocalDate();
-                LocalDate dataVisto = resultSet.getDate(10).toLocalDate();
+                LocalDate dataVisto;
+                if(tipo == TipoProfissional.REGISTRADO) {
+                    dataVisto = null;
+                } else {
+                    dataVisto = resultSet.getDate(10).toLocalDate();
+                }
 
                 listaProfissionais.add(new Profissional(codigo, nome, email, senha, telefone, tipo, situacaoRegistro, dataNascimento, dataRegistro, dataVisto));
             }
@@ -175,7 +180,12 @@ public class ProfissionalDaoImpl implements ProfissionalDao {
 
             preparedStatement.executeUpdate();
 
-            // METODO PARA DELETAR TITULO AQUI!!!!!!!!!!!!!
+            sql = "DELETE FROM tb_titulo WHERE codigo = ?)";
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, codigo);
+
+            preparedStatement.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,10 +206,11 @@ public class ProfissionalDaoImpl implements ProfissionalDao {
     }
 
     @Override
-    public ResponseEntity<Profissional> ativarProfissional(String codigo, Titulo titulo) {
+    public ResponseEntity ativarProfissional(String codigo, String descricao) {
+        Profissional profissional = new Profissional();
         try {
             connection = Conexao.getDatabaseConnection();
-            String sql = "UPDATE FROM tb_profissional SET situacao_registro = ATIVO WHERE codigo = ?";
+            String sql = "UPDATE tb_profissional SET situacao_registro = 'ATIVO' WHERE codigo = ?";
             preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, codigo);
@@ -210,10 +221,11 @@ public class ProfissionalDaoImpl implements ProfissionalDao {
             preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, codigo);
-            preparedStatement.setString(2, titulo.getDescricao());
+            preparedStatement.setString(2, descricao);
 
             preparedStatement.executeUpdate();
 
+            profissional = buscarPorCodigo(codigo).getBody();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -229,59 +241,15 @@ public class ProfissionalDaoImpl implements ProfissionalDao {
             }
         }
 
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Profissional> desativarProfissional(String codigo) {
-
-        try {
-            connection = Conexao.getDatabaseConnection();
-            String sql = "UPDATE FROM tb_profissional SET situacao_registro = INATIVO WHERE codigo = ?";
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, codigo);
-
-            preparedStatement.executeUpdate();
-
-            List<Titulo> listaTitulos = tituloDao.buscarTituloPorProfissional(codigo).getBody();
-            if(!listaTitulos.isEmpty()) {
-                sql = "DELETE FROM tb_titulo WHERE codigo = ?";
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, codigo);
-
-                preparedStatement.executeUpdate();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    preparedStatement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return null;
+        return ResponseEntity.ok(profissional);
     }
 
     @Override
     public ResponseEntity<Profissional> cancelarProfissional(String codigo) {
-
+        Profissional profissional = new Profissional();
         try {
             connection = Conexao.getDatabaseConnection();
-            String sql = "UPDATE FROM tb_profissional SET situacao_registro = CANCELADO WHERE codigo = ?";
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, codigo);
-
-            preparedStatement.executeUpdate();
-
+            String sql;
             List<Titulo> listaTitulos = tituloDao.buscarTituloPorProfissional(codigo).getBody();
             if(!listaTitulos.isEmpty()) {
                 sql = "DELETE FROM tb_titulo WHERE codigo = ?";
@@ -290,6 +258,13 @@ public class ProfissionalDaoImpl implements ProfissionalDao {
 
                 preparedStatement.executeUpdate();
             }
+
+            sql = "UPDATE tb_profissional SET situacao_registro = 'CANCELADO' WHERE codigo = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, codigo);
+            preparedStatement.executeUpdate();
+
+            profissional = buscarPorCodigo(codigo).getBody();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -305,6 +280,45 @@ public class ProfissionalDaoImpl implements ProfissionalDao {
             }
         }
 
-        return null;
+        return ResponseEntity.ok(profissional);
+    }
+
+    @Override
+    public ResponseEntity<Profissional> desativarProfissional(String codigo) {
+        Profissional profissional = new Profissional();
+        try {
+            connection = Conexao.getDatabaseConnection();
+            String sql;
+
+            List<Titulo> listaTitulos = tituloDao.buscarTituloPorProfissional(codigo).getBody();
+            if(!listaTitulos.isEmpty()) {
+                sql = "DELETE FROM tb_titulo WHERE codigo = ?";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, codigo);
+                preparedStatement.executeUpdate();
+            }
+
+            sql = "UPDATE tb_profissional SET situacao_registro = 'INATIVO' WHERE codigo = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, codigo);
+            preparedStatement.executeUpdate();
+
+            profissional = buscarPorCodigo(codigo).getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return ResponseEntity.ok(profissional);
     }
 }

@@ -39,7 +39,7 @@ public class TituloDaoImpl implements TituloDao {
             Profissional profissional = profissionalDao.buscarPorCodigo(codigo).getBody();
             assert profissional != null;
             if(profissional.getSituacaoRegistro() != SituacaoRegistro.ATIVO) {
-                sql = "UPDATE FROM tb_profissional SET situacao_registro = ATIVO WHERE codigo = ?";
+                sql = "UPDATE tb_profissional SET situacao_registro = 'ATIVO' WHERE codigo = ?";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, codigo);
                 preparedStatement.executeUpdate();
@@ -130,24 +130,24 @@ public class TituloDaoImpl implements TituloDao {
     }
 
     @Override
-    public ResponseEntity excluirTitulo(Titulo titulo) {
+    public ResponseEntity excluirTitulo(String codigo, String descricao) {
         try {
             connection = Conexao.getDatabaseConnection();
             String sql = "DELETE FROM tb_titulo WHERE codigo = ? and descricao = ?";
 
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, titulo.getCodigo());
-            preparedStatement.setString(2, titulo.getDescricao());
+            preparedStatement.setString(1, codigo);
+            preparedStatement.setString(2, descricao);
 
             preparedStatement.executeUpdate();
 
-            Profissional profissional = profissionalDao.buscarPorCodigo(titulo.getCodigo()).getBody();
+            Profissional profissional = profissionalDao.buscarPorCodigo(codigo).getBody();
             assert profissional != null;
-            if (buscarTituloPorProfissional(titulo.getCodigo()).getBody().isEmpty()) {
-                sql = "UPDATE FROM tb_profissional SET situacao_registro = INATIVO WHERE codigo = ?";
+            if (buscarTituloPorProfissional(codigo).getBody().isEmpty()) {
+                sql = "UPDATE tb_profissional SET situacao_registro = 'INATIVO' WHERE codigo = ?";
                 preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, titulo.getCodigo());
+                preparedStatement.setString(1, codigo);
                 preparedStatement.executeUpdate();
             }
 

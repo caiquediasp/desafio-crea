@@ -3,6 +3,7 @@ package com.desafiocrea.util;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Titulo {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String codigo;
     private String descricao;
 

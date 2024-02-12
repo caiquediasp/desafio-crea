@@ -12,5 +12,5 @@ public interface TituloDao {
 
     ResponseEntity<List<Titulo>> listarTitulos();
 
-    ResponseEntity excluirTitulo(Titulo titulo);
+    ResponseEntity excluirTitulo(String codigo, String descricao);
 }
