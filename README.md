@@ -4,6 +4,12 @@ Teste técnico - API de castrado de profissionais e titulos
 
 Aplicação foi feita utilizando Java + Spring, se conectando por meio de JDBC com um PostgreSQL, além de ser documentada com Swagger-UI para facilitar a usabilidade.
 
+## Funcionalidades
+- CRUD profissional.
+- CRUD títulos.
+- Ativar profissional, desativar profissional, cancelar profissional, adicionar título a um
+profissional
+
 ## Deploy
 O projeto em Spring está rodando em AWS com EC2, e o PostgreSQL com RDS 
  
