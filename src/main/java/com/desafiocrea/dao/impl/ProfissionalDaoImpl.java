@@ -172,21 +172,16 @@ public class ProfissionalDaoImpl implements ProfissionalDao {
     public ResponseEntity excluirProfissional(String codigo) {
         try {
             connection = Conexao.getDatabaseConnection();
-            String sql = "DELETE FROM tb_profissional WHERE codigo = ?";
 
+            String sql = "DELETE FROM tb_titulo WHERE codigo = ?";
             preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setString(1, codigo);
-
             preparedStatement.executeUpdate();
 
-            sql = "DELETE FROM tb_titulo WHERE codigo = ?)";
+            sql = "DELETE FROM tb_profissional WHERE codigo = ?";
             preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setString(1, codigo);
-
             preparedStatement.executeUpdate();
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
