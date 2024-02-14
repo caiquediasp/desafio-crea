@@ -11,6 +11,6 @@ Aplicação foi feita utilizando Java + Spring, se conectando por meio de JDBC c
 profissional
 
 ## Deploy
-O projeto em Spring está rodando em AWS com EC2, e o PostgreSQL com RDS 
+O projeto em está rodando em AWS com EC2 + PostgreSQL com RDS 
  
  - [Link para aplicação rodando  ](http://ec2-18-222-221-229.us-east-2.compute.amazonaws.com:8080/swagger-ui/index.html)
